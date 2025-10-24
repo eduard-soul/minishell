@@ -1,0 +1,132 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/22 12:36:44 by edtataru          #+#    #+#             */
+/*   Updated: 2025/10/23 01:28:42 by edesprez         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+#include <string.h>
+
+int	is_good_env_char(char c, int is_first)
+{
+	if (c == 0)
+		return (0);
+	if (is_first)
+	{
+		if (!(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && c != '_')
+			return (0);
+		return (1);
+	}
+	if (!(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z')
+		&& c != '_' && !(c >= '0' && c <= '9'))
+		return (0);
+	return (1);
+}
+
+char	*replace_in_envp_if_exist(char *envp, char **str, int k, int *i)
+{
+	int		new_len;
+	char	*dest;
+	int		l;
+	int		m;
+
+	new_len = ft_strlen(*str) - (1 + k)
+		+ (ft_strlen(envp) - (k + 1));
+	dest = malloc(sizeof(char) * (new_len + 1));
+	if (!dest)
+		return (NULL);
+	l = -1;
+	while (++l < *i - 1)
+		dest[l] = (*str)[l];
+	m = k + 1;
+	while (envp[m])
+		dest[l++] = envp[m++];
+	m = *i + k;
+	while ((*str)[m])
+		dest[l++] = (*str)[m++];
+	dest[l] = '\0';
+	*i = *i - 1 + (ft_strlen(envp) - (k + 1));
+	return (dest);
+}
+
+char	*replace_in_envp_if_not_exist(char **str, int k, int *i)
+{
+	char	*dest;
+	int		l;
+	int		m;
+
+	while (is_good_env_char((*str)[*i + k], !k))
+		k++;
+	dest = malloc(sizeof(char) * (k + 1));
+	if (!dest)
+		return (NULL);
+	l = -1;
+	while (++l < *i - 1)
+		dest[l] = (*str)[l];
+	m = *i + k;
+	while ((*str)[m])
+		dest[l++] = (*str)[m++];
+	dest[l] = '\0';
+	*i = *i - 1;
+	return (dest);
+}
+
+char	*search_in_envp_and_replace(char **str, int *i, char **envp, int j)
+{
+	char	*dest;
+	int		k;
+
+	if (!(*str)[*i])
+		return (*str);
+	while (envp && envp[j])
+	{
+		k = 0;
+		while (envp[j][k] && envp[j][k] != '='
+			&& is_good_env_char((*str)[*i + k], !k)
+			&& envp[j][k] == (*str)[*i + k])
+			k++;
+		if (envp[j][k] == '=' && !is_good_env_char((*str)[*i + k], !k))
+		{
+			dest = replace_in_envp_if_exist(envp[j], str, k, i);
+			return (dest);
+		}
+		j++;
+	}
+	k = 0;
+	return (replace_in_envp_if_not_exist(str, k, i));
+}
+
+t_cmds	*new_parsing_ultra(char **str, t_cmds *cmds, char ***envp, int last_ret)
+{
+	int	i;
+
+	if (!search_and_replace_var(str, *envp, last_ret, 0))
+		return (0);
+	i = 0;
+	while ((*str)[i])
+	{
+		if (!add_elem_to_cmds(&cmds, nb_x_until_pipe(*str, i, 1),
+				nb_x_until_pipe(*str, i, 0), envp))
+			return (0);
+		if (!cmds)
+			printf("pb malloc\n");
+		cmds->std_input = 0;
+		while (cmds && cmds->next)
+			cmds = cmds->next;
+		store_args(*str, i, cmds->argv);
+		store_redirections(*str, &i, cmds->redirections);
+		while ((*str)[i] && (*str)[i] == ' ')
+			i++;
+		if ((*str)[i] == '|')
+			i++;
+	}
+	while (cmds && cmds->previous)
+		cmds = cmds->previous;
+	return (cmds);
+}
