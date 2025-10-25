@@ -6,7 +6,7 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 12:36:44 by edtataru          #+#    #+#             */
-/*   Updated: 2025/10/25 14:53:08 by edtataru         ###   ########.fr       */
+/*   Updated: 2025/10/25 18:01:07 by edtataru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ char	*replace_in_envp_if_not_exist(char **str, size_t k, size_t *i)
 	return (dest);
 }
 
-char	*search_in_envp_and_replace(char **str, size_t *i, char **envp, size_t j)
+char	*search_in_envp_and_replace(char **str, size_t *i, char **envp,
+				size_t j)
 {
 	char	*dest;
 	size_t	k;
@@ -105,7 +106,8 @@ char	*search_in_envp_and_replace(char **str, size_t *i, char **envp, size_t j)
 	return (replace_in_envp_if_not_exist(str, k, i));
 }
 
-	t_cmds	*new_parsing_ultra(char **str, t_cmds *cmds, char ***envp, int last_ret)
+t_cmds	*new_parsing_ultra(char **str, t_cmds *cmds, char ***envp,
+			int last_ret)
 {
 	size_t	i;
 

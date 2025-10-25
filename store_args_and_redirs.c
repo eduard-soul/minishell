@@ -12,9 +12,8 @@
 
 #include "minishell.h"
 
-char	*replace_with_ret(char **str, size_t *i, int last_ret)
+char	*replace_with_ret(char **str, size_t *i, int last_ret, char *dest)
 {
-	char	*dest;
 	char	*temp;
 	char	*nb;
 
@@ -33,10 +32,11 @@ char	*replace_with_ret(char **str, size_t *i, int last_ret)
 		return (0);
 	dest = temp;
 	temp = ft_strncpy(*str, *i + 1, ft_strlen(*str) - *i);
+	nb = 0;
 	if (temp)
 		nb = ft_strjoin(dest, temp);
-	else
-		nb = 0;
+	if (temp)
+		free(temp);
 	free(dest);
 	return (nb);
 }
@@ -44,7 +44,7 @@ char	*replace_with_ret(char **str, size_t *i, int last_ret)
 int	store_args(char *str, int i, char **argv)
 {
 	size_t	j;
-	int	failed_malloc;
+	int		failed_malloc;
 
 	j = 0;
 	failed_malloc = 0;

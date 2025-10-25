@@ -41,7 +41,7 @@ typedef struct s_cmds
 
 	struct s_cmds	*next;
 	struct s_cmds	*previous;
-}t_cmds;
+}	t_cmds;
 
 typedef struct s_minishell
 {
@@ -56,19 +56,19 @@ typedef struct s_minishell
 
 	char	**envp;
 	char	**new_envp;
-}t_minishell;
+}	t_minishell;
 
 typedef enum e_sigmode
 {
 	SIGM_INTERACTIVE = 0,
 	SIGM_PARENT_EXEC = 1
-}t_sigmode;
+}	t_sigmode;
 
 typedef struct s_sigstate
 {
 	sig_atomic_t	flag;
 	sig_atomic_t	mode;
-}t_sigstate;
+}	t_sigstate;
 
 int		get_signal_flag(void);
 void	reset_signal_flag(void);
@@ -80,7 +80,7 @@ int		nb_x_until_pipe(char *str, int i, int is_arg);
 char	*copy_if_arg(char *str, int *i, int *failed_malloc);
 char	*copy_if_redirection(char *str, size_t *i);
 t_cmds	*new_parsing_ultra(char **str, t_cmds *cmds, char ***envp,
-			  int last_ret);
+			int last_ret);
 int		ft_strlen(char *str);
 char	*ft_atoi(int nb);
 char	*ft_strdup(char *to_dup);
@@ -121,11 +121,12 @@ void	sig_handler(int signum, siginfo_t *siginfo, void *sigclient);
 void	set_mode(sig_atomic_t mode);
 void	set_flag(sig_atomic_t value);
 void	*free_and_null(void *ptr);
-char	*replace_with_ret(char **str, size_t *i, int last_ret);
-char	*search_in_envp_and_replace(char **str, size_t *i, char **envp, size_t j);
+char	*replace_with_ret(char **str, size_t *i, int last_ret, char *dest);
+char	*search_in_envp_and_replace(char **str, size_t *i, char **envp,
+			size_t j);
 int		search_and_replace_var(char **str, char **envp, int last_ret, size_t i);
 t_cmds	*add_elem_to_cmds(t_cmds **cmds, int size_argv,
-			 int size_redir, char ***envp);
+			int size_redir, char ***envp);
 int		store_args(char *str, int i, char **argv);
 int		store_redirections(char *str, size_t *i, char **redirections);
 void	perror_and_exit(char *str, int ret);
@@ -159,7 +160,7 @@ int		add_fd_of_heredocs(t_cmds *cmds);
 t_cmds	*first_executable_cmd(t_cmds *cmds);
 int		count_executable_cmds(t_cmds *cmds);
 int		exec_commands(t_cmds *cmds, int is_alone_builtin,
-		   int ret, int is_child);
+			int ret, int is_child);
 int		prepare_pipes(t_cmds *cmds);
 int		fork_and_exec_commands(t_cmds *cmds);
 void	free_all_commands(t_cmds *cmds);
@@ -182,8 +183,8 @@ int		handle_no_equal(char ***p_envp, char *name);
 int		put_err_and_free_name(char *str, char *name);
 int		has_equal_ret(int ret, char ***p_envp, char *name);
 int		handle_plus_equal(char ***p_envp, char *name,
-		       char *value, char *existing);
+			char *value, char *existing);
 int		replace_or_append(char ***p_envp, char *name, char *value, int idx);
-void		rl_replace_line(const char *text, int clear_undo);
+void	rl_replace_line(const char *text, int clear_undo);
 
 #endif

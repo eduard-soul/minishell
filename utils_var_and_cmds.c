@@ -22,7 +22,7 @@ int	replace_var(char **str, size_t *i, char **envp, int last_ret)
 		|| (*str)[*i] == '<' || (*str)[*i] == '>')
 		return (1);
 	if ((*str)[*i] == '?')
-		temp = replace_with_ret(str, i, last_ret);
+		temp = replace_with_ret(str, i, last_ret, NULL);
 	else
 	{
 		if (!is_good_env_char((*str)[*i], 1))
