@@ -15,7 +15,7 @@
 char	*copy_until_char(char *str, int *i, char c, int *failed_malloc)
 {
 	char	*dest;
-	int		j;
+	size_t	j;
 
 	j = 0;
 	while (str[*i + j] && str[*i + j] != c)

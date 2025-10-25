@@ -15,15 +15,15 @@
 char	*ft_strncpy(char *s1, int start, int len)
 {
 	char	*dest;
-	int		i;
-	int		j;
+	size_t	i;
+	size_t	j;
 
 	dest = malloc(sizeof(char) * (len + 1));
 	if (!dest)
 		return (0);
-	i = start;
+	i = (size_t)start;
 	j = 0;
-	while (i < start + len)
+	while (i < (size_t)start + (size_t)len)
 		dest[j++] = s1[i++];
 	dest[j] = 0;
 	return (dest);

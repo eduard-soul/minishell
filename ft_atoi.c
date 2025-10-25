@@ -15,12 +15,12 @@
 char	*ft_atoi(int nb)
 {
 	char	*dest;
-	int		len;
-	int		tmp;
+	size_t	len;
+	size_t	tmp;
 
 	if (nb < 0)
 		return (0);
-	tmp = nb;
+	tmp = (size_t)nb;
 	len = 1;
 	if (nb == 0)
 		len++;

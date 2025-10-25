@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   store_args_and_redirs.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 17:56:27 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/22 18:00:21 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/25 13:52:37 by edtataru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*replace_with_ret(char **str, int *i, int last_ret)
 
 int	store_args(char *str, int i, char **argv)
 {
-	int	j;
+	size_t	j;
 	int	failed_malloc;
 
 	j = 0;
@@ -54,7 +54,7 @@ int	store_args(char *str, int i, char **argv)
 		if (failed_malloc)
 		{
 			i = 0;
-			while (i != j)
+			while ((size_t)i != j)
 				free(argv[i++]);
 			return (0);
 		}
@@ -67,7 +67,7 @@ int	store_args(char *str, int i, char **argv)
 
 int	store_redirections(char *str, int *i, char **redirections)
 {
-	int	j;
+	size_t	j;
 
 	j = 0;
 	while (str[*i] && str[*i] != '|')

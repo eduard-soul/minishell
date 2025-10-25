@@ -15,7 +15,7 @@
 char	*ft_malloc_len_word(char *str, int i, char delim)
 {
 	char	*result;
-	int		j;
+	size_t	j;
 
 	j = 0;
 	while (str[i] && str[i] != delim)
@@ -29,10 +29,10 @@ char	*ft_malloc_len_word(char *str, int i, char delim)
 
 char	**free_split(char **result, int j)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	while (i < j)
+	while (i < (size_t)j)
 		free(result[i++]);
 	free(result);
 	return (NULL);
@@ -40,8 +40,8 @@ char	**free_split(char **result, int j)
 
 int	count_words(char *str, char delim)
 {
-	int	i;
-	int	nb_words;
+	size_t	i;
+	size_t	nb_words;
 
 	i = 0;
 	nb_words = 0;
@@ -53,7 +53,7 @@ int	count_words(char *str, char delim)
 			i++;
 		nb_words++;
 	}
-	return (nb_words);
+	return ((int)nb_words);
 }
 
 int	skip_prefix(char *str, int i)
@@ -74,7 +74,7 @@ int	skip_prefix(char *str, int i)
 
 int	ft_fill_word(char *dest, char *src, int i, char delim)
 {
-	int	k;
+	size_t	k;
 
 	k = 0;
 	while (src[i] && src[i] != delim)

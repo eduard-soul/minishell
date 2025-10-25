@@ -6,7 +6,7 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 12:36:44 by edtataru          #+#    #+#             */
-/*   Updated: 2025/10/23 01:28:42 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/25 13:52:58 by edtataru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ int	is_good_env_char(char c, int is_first)
 
 char	*replace_in_envp_if_exist(char *envp, char **str, int k, int *i)
 {
-	int		new_len;
+	size_t	new_len;
 	char	*dest;
-	int		l;
-	int		m;
+	size_t	l;
+	size_t	m;
 
 	new_len = ft_strlen(*str) - (1 + k)
 		+ (ft_strlen(envp) - (k + 1));
@@ -42,7 +42,7 @@ char	*replace_in_envp_if_exist(char *envp, char **str, int k, int *i)
 	if (!dest)
 		return (NULL);
 	l = -1;
-	while (++l < *i - 1)
+	while (++l < (size_t)(*i - 1))
 		dest[l] = (*str)[l];
 	m = k + 1;
 	while (envp[m])
@@ -58,8 +58,8 @@ char	*replace_in_envp_if_exist(char *envp, char **str, int k, int *i)
 char	*replace_in_envp_if_not_exist(char **str, int k, int *i)
 {
 	char	*dest;
-	int		l;
-	int		m;
+	size_t	l;
+	size_t	m;
 
 	while (is_good_env_char((*str)[*i + k], !k))
 		k++;
@@ -67,7 +67,7 @@ char	*replace_in_envp_if_not_exist(char **str, int k, int *i)
 	if (!dest)
 		return (NULL);
 	l = -1;
-	while (++l < *i - 1)
+	while (++l < (size_t)(*i - 1))
 		dest[l] = (*str)[l];
 	m = *i + k;
 	while ((*str)[m])
@@ -80,7 +80,7 @@ char	*replace_in_envp_if_not_exist(char **str, int k, int *i)
 char	*search_in_envp_and_replace(char **str, int *i, char **envp, int j)
 {
 	char	*dest;
-	int		k;
+	size_t	k;
 
 	if (!(*str)[*i])
 		return (*str);
@@ -102,7 +102,7 @@ char	*search_in_envp_and_replace(char **str, int *i, char **envp, int j)
 	return (replace_in_envp_if_not_exist(str, k, i));
 }
 
-t_cmds	*new_parsing_ultra(char **str, t_cmds *cmds, char ***envp, int last_ret)
+	t_cmds	*new_parsing_ultra(char **str, t_cmds *cmds, char ***envp, int last_ret)
 {
 	int	i;
 
