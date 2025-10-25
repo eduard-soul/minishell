@@ -88,7 +88,7 @@ int	process_arg(char ***p_envp, char *arg, int is_plus, int len)
 	char	*name;
 	char	*value;
 
-	int	(ret) = 0;
+	int (ret) = 0;
 	if (arg[len] == '+' && arg[len + 1] == '=')
 		is_plus = 1;
 	has_equal = 0;
