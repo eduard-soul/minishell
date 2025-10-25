@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils_var_and_cmds.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 17:50:03 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/22 17:59:32 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/25 14:37:17 by edtataru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	replace_var(char **str, int *i, char **envp, int last_ret)
+int	replace_var(char **str, size_t *i, char **envp, int last_ret)
 {
 	char	*temp;
 
@@ -40,7 +40,7 @@ int	replace_var(char **str, int *i, char **envp, int last_ret)
 }
 
 int	search_and_replace_var_double_quotes(char **str,
-					int *i, char **envp, int last_ret)
+					size_t *i, char **envp, int last_ret)
 {
 	int	j;
 
@@ -62,7 +62,7 @@ int	search_and_replace_var_double_quotes(char **str,
 	return (1);
 }
 
-int	search_and_replace_var(char **str, char **envp, int last_ret, int i)
+int	search_and_replace_var(char **str, char **envp, int last_ret, size_t i)
 {
 	int	j;
 

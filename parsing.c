@@ -6,7 +6,7 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 12:36:44 by edtataru          #+#    #+#             */
-/*   Updated: 2025/10/25 14:34:57 by edtataru         ###   ########.fr       */
+/*   Updated: 2025/10/25 14:53:08 by edtataru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	is_good_env_char(char c, int is_first)
 	return (1);
 }
 
-char	*replace_in_envp_if_exist(char *envp, char **str, int k, int *i)
+char	*replace_in_envp_if_exist(char *envp, char **str, size_t k, size_t *i)
 {
 	size_t	new_len;
 	char	*dest;
@@ -41,9 +41,12 @@ char	*replace_in_envp_if_exist(char *envp, char **str, int k, int *i)
 	dest = malloc(sizeof(char) * (new_len + 1));
 	if (!dest)
 		return (NULL);
-	l = -1;
-	while (++l < (size_t)(*i - 1))
+	l = 0;
+	while (l++ < (size_t)(*i - 1))
+	{
 		dest[l] = (*str)[l];
+		l++;
+	}
 	m = k + 1;
 	while (envp[m])
 		dest[l++] = envp[m++];
@@ -55,7 +58,7 @@ char	*replace_in_envp_if_exist(char *envp, char **str, int k, int *i)
 	return (dest);
 }
 
-char	*replace_in_envp_if_not_exist(char **str, int k, int *i)
+char	*replace_in_envp_if_not_exist(char **str, size_t k, size_t *i)
 {
 	char	*dest;
 	size_t	l;
@@ -77,7 +80,7 @@ char	*replace_in_envp_if_not_exist(char **str, int k, int *i)
 	return (dest);
 }
 
-char	*search_in_envp_and_replace(char **str, int *i, char **envp, int j)
+char	*search_in_envp_and_replace(char **str, size_t *i, char **envp, size_t j)
 {
 	char	*dest;
 	size_t	k;
@@ -104,7 +107,7 @@ char	*search_in_envp_and_replace(char **str, int *i, char **envp, int j)
 
 	t_cmds	*new_parsing_ultra(char **str, t_cmds *cmds, char ***envp, int last_ret)
 {
-	int	i;
+	size_t	i;
 
 	if (!search_and_replace_var(str, *envp, last_ret, 0))
 		return (0);

@@ -6,13 +6,13 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 17:56:27 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/25 14:34:58 by edtataru         ###   ########.fr       */
+/*   Updated: 2025/10/25 14:41:05 by edtataru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*replace_with_ret(char **str, int *i, int last_ret)
+char	*replace_with_ret(char **str, size_t *i, int last_ret)
 {
 	char	*dest;
 	char	*temp;
@@ -65,7 +65,7 @@ int	store_args(char *str, int i, char **argv)
 	return (1);
 }
 
-int	store_redirections(char *str, int *i, char **redirections)
+int	store_redirections(char *str, size_t *i, char **redirections)
 {
 	size_t	j;
 

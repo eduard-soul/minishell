@@ -22,7 +22,7 @@ int	is_name_delim(char c)
 	return (0);
 }
 
-void	skip_quoted_block(char *s, int *i)
+void	skip_quoted_block(char *s, size_t *i)
 {
 	char	q;
 
@@ -33,7 +33,7 @@ void	skip_quoted_block(char *s, int *i)
 		(*i)++;
 }
 
-void	skip_to_word_end(char *s, int *i)
+void	skip_to_word_end(char *s, size_t *i)
 {
 	while (s[*i] && !is_name_delim(s[*i]))
 		(*i)++;

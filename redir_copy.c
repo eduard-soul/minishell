@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redir_copy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 15:44:25 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/23 15:49:30 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/25 14:47:08 by edtataru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	copy_name(char *s, int *i, char *dest, int *j)
+void	copy_name(char *s, size_t *i, char *dest, size_t *j)
 {
 	char	q;
 
@@ -29,9 +29,9 @@ void	copy_name(char *s, int *i, char *dest, int *j)
 		dest[(*j)++] = s[(*i)++];
 }
 
-void	fill_redir(char *s, int *i, char *dest)
+void	fill_redir(char *s, size_t *i, char *dest)
 {
-	int		j;
+	size_t	j;
 	char	op;
 
 	j = 0;
@@ -45,10 +45,10 @@ void	fill_redir(char *s, int *i, char *dest)
 	dest[j] = '\0';
 }
 
-int	calc_redir_len(char *s, int i)
+int	calc_redir_len(char *s, size_t i)
 {
-	int	len;
-	int	p;
+	size_t	len;
+	size_t	p;
 
 	len = 1;
 	if (s[i + 1] && s[i + 1] == s[i])
@@ -61,10 +61,10 @@ int	calc_redir_len(char *s, int i)
 	return (len + len_word(s, p));
 }
 
-char	*copy_if_redirection(char *str, int *i)
+char	*copy_if_redirection(char *str, size_t *i)
 {
 	char	*dest;
-	int		len;
+	size_t	len;
 
 	dest = NULL;
 	while (str[*i] == ' ')
