@@ -1,9 +1,10 @@
 NAME=minishell
 
-CFLAGS:=-Wall -Wextra -Werror
+CFLAGS:= -Wall -Wextra -Werror
 FLAGS_MACOS = -I/opt/homebrew/opt/readline/include -L/opt/homebrew/opt/readline/lib -lhistory
-FLAG_FILES=-lreadline
-CC=cc
+FLAGS_LEAK= -g -fsanitize=address
+FLAG_FILES= -lreadline
+CC= clang
 
 SRC= ultra.c ./ft_cd.c ./utils.c ./ft_env.c ./signal.c ./ft_pwd.c ./ft_exit.c \
 	 ./ft_split.c ./ft_putstr_fd.c ./until_pipe.c ./ft_strlen.c ./ft_strncpy.c \
@@ -18,6 +19,7 @@ SRC= ultra.c ./ft_cd.c ./utils.c ./ft_env.c ./signal.c ./ft_pwd.c ./ft_exit.c \
 INCLUDES=./minishell.h\
 
 OBJ=$(SRC:.c=.o)
+#OBJ_LEAK=$(SRC:.c=.o)
 
 GREEN=\033[32m
 RED=\033[31m
@@ -33,6 +35,10 @@ $(NAME): $(OBJ)
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $^ -o $@
+
+leak: CFLAGS += $(FLAGS_LEAK)
+leak: $(NAME)
+	@echo "$(GREEN)- Minishell created with leak detection ✓ ✓ ✓-$(RESET)"
 
 print:
 	@echo "$(YELLOW)✧ Compilling Minishell.. ✧$(RESET)"
@@ -50,4 +56,5 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+
+.PHONY: all clean fclean re print leak
