@@ -61,28 +61,19 @@ int	handle_eof(char *line)
 	cmds = new_parsing_ultra(&copy, NULL, envp_copy, last_ret);
 	if (!cmds)
 	{
-		if (copy == original_copy)
-			free(original_copy);
-		else
-			free(copy);
+		free(original_copy);
 		return (last_ret);
 	}
 	if (!prepare_pipes(cmds))
 	{
-		if (copy == original_copy)
-			free(original_copy);
-		else
-			free(copy);
+		free(original_copy);
 		free_all_commands(cmds);
 		exit(1);
 	}
 	while (cmds->previous)
 		cmds = cmds->previous;
+	free(original_copy);
 	ret = fork_and_exec_commands(cmds);
 	free_all_commands(cmds);
-	if (copy != original_copy)
-		free(copy);
-	else
-		free(original_copy);
 	return (ret);
 }
