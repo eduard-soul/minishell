@@ -28,7 +28,10 @@ int	handle_sig_and_empty(char *line, int *last_ret)
 		*last_ret = 130;
 		reset_signal_flag();
 		if (!line[0])
+		{
+			free(line);
 			return (1);
+		}
 	}
 	return (0);
 }
