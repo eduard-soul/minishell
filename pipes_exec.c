@@ -45,6 +45,7 @@ t_cmds	*first_executable_cmd(t_cmds *cmds)
 int	prepare_pipes(t_cmds *cmds)
 {
 	t_cmds	*cur;
+	t_cmds	*cleanup;
 
 	cur = cmds;
 	while (cur->next)
@@ -52,6 +53,13 @@ int	prepare_pipes(t_cmds *cmds)
 		if (pipe(cur->fd) == -1)
 		{
 			perror("pipe");
+			cleanup = cmds;
+			while (cleanup != cur)
+			{
+				close(cleanup->fd[0]);
+				close(cleanup->fd[1]);
+				cleanup = cleanup->next;
+			}
 			return (0);
 		}
 		cur = cur->next;
