@@ -90,6 +90,8 @@ int	redirect_left(char *filename, t_minishell *minishell)
 
 int	open_redir(char *t, int which, int *fd)
 {
+	char	*delimiter;
+
 	if (*fd >= 0)
 		close(*fd);
 	if (which == '>')
@@ -100,7 +102,12 @@ int	open_redir(char *t, int which, int *fd)
 			*fd = open(t + 1, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	}
 	else if (t[1] == '<')
-		*fd = double_redirect_left_ultra(t + 2);
+	{
+		delimiter = t + 2;
+		while (*delimiter == ' ')
+			delimiter++;
+		*fd = double_redirect_left_ultra(delimiter);
+	}
 	else
 		*fd = open(t + 1, O_RDONLY);
 	if (*fd == -130)
