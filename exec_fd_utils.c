@@ -21,9 +21,14 @@ int	check_and_save_dup(t_cmds *cmds, int save_fd_in_out[2],
 		save_fd_in_out[0] = dup(STDIN_FILENO);
 		save_fd_in_out[1] = dup(STDOUT_FILENO);
 		if (save_fd_in_out[0] == -1 || save_fd_in_out[1] == -1)
+		{
 			perror("dup");
-		if (save_fd_in_out[0] == -1 || save_fd_in_out[1] == -1)
+			if (save_fd_in_out[0] != -1)
+				close(save_fd_in_out[0]);
+			if (save_fd_in_out[1] != -1)
+				close(save_fd_in_out[1]);
 			return (1);
+		}
 	}
 	if (!cmds->argv || !cmds->argv[0])
 	{
