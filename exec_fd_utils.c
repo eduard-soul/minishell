@@ -35,14 +35,14 @@ int	check_and_save_dup(t_cmds *cmds, int save_fd_in_out[2],
 		check_and_close_fds(cmds);
 		if (is_alone_builtin)
 			return (0);
-		exit(0);
+		safe_exit(cmds->envp, 0);
 	}
 	if ((cmds->previous && !cmds->std_input
 			&& dup2(cmds->previous->fd[0], STDIN_FILENO) == -1)
 		|| ((cmds->std_input > 0 && dup2(cmds->std_input, STDIN_FILENO) == -1)))
 	{
 		perror("dup2");
-		exit(1);
+		safe_exit(cmds->envp, 1);
 	}
 	return (2);
 }
@@ -68,7 +68,7 @@ int	get_fd_and_process(t_cmds *cmds, int is_alone_builtin,
 			dup_and_close(save_fd_in, save_fd_out);
 		if (is_alone_builtin)
 			return ((fd == -2) + 1);
-		exit((fd == -2) + 1);
+		safe_exit(cmds->envp, (fd == -2) + 1);
 	}
 	if (fd > 0)
 	{
@@ -94,7 +94,8 @@ int	exec_builtin_and_close_fds(t_cmds *cmds, int is_child, int is_alone_builtin,
 		dup_and_close(save_fd_in_out[0], save_fd_in_out[1]);
 	if (is_alone_builtin)
 		return (ret);
-	exit(ret);
+	safe_exit(cmds->envp, ret);
+	return (0);
 }
 
 int	exec_commands(t_cmds *cmds, int is_alone_builtin, int ret, int is_child)
@@ -118,5 +119,6 @@ int	exec_commands(t_cmds *cmds, int is_alone_builtin, int ret, int is_child)
 		exec_absolute_path(cmds);
 	else
 		search_path_and_exec(cmds);
-	exit(1);
+	safe_exit(cmds->envp, 1);
+	return (0);
 }

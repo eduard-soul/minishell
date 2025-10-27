@@ -80,3 +80,12 @@ void	put_err_n_viable(char *argv, char *error_msg, int exit_code)
 	ft_putstr_fd("\n", STDERR_FILENO);
 	exit(exit_code);
 }
+
+void	safe_put_err_n_viable(char ***envp, char *argv, char *err, int code)
+{
+	ft_putstr_fd("Minishell: ", STDERR_FILENO);
+	ft_putstr_fd(argv, STDERR_FILENO);
+	ft_putstr_fd(err, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+	safe_exit(envp, code);
+}

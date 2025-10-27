@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+void	safe_exit(char ***envp, int ret)
+{
+	if (envp && *envp)
+		free_array(*envp);
+	exit(ret);
+}
+
 void	perror_and_exit(char *str, int ret)
 {
 	perror(str);

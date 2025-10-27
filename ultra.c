@@ -50,5 +50,5 @@ int	main(int argc, char **argv, char **envp)
 	setup_interactive_signals();
 	run_loop(&last_ret, &envp_copy);
 	free_array(envp_copy);
-	return (0);
+	return (last_ret);
 }

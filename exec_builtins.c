@@ -36,11 +36,11 @@ int	is_built_in(char *str)
 int	exec_builtin(char **argv, int fd, char ***envp, int is_child)
 {
 	if (!argv || !argv[0])
-		exit(127);
+		safe_exit(envp, 127);
 	if (!ft_strcmp(argv[0], "echo"))
 		return (ft_echo_ultra(argv, fd));
 	if (!ft_strcmp(argv[0], "exit"))
-		return (ft_exit(argv, is_child));
+		return (ft_exit(argv, is_child, envp));
 	if (!ft_strcmp(argv[0], "export"))
 		return (ft_export(argv, envp));
 	if (!ft_strcmp(argv[0], "unset"))

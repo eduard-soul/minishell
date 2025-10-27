@@ -81,7 +81,7 @@ static int	normalize_code(long long number)
 	return (code);
 }
 
-int	ft_exit(char **argv, int is_child)
+int	ft_exit(char **argv, int is_child, char ***envp)
 {
 	int			argc;
 	long long	exit_value;
@@ -91,21 +91,22 @@ int	ft_exit(char **argv, int is_child)
 	if (!is_child)
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
 	if (argc <= 1)
-		exit(0);
+		safe_exit(envp, 0);
 	if (!is_numeric_argument(argv[1]) || !parse_exit_val(argv[1], &exit_value))
 	{
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(argv[1], STDERR_FILENO);
 		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-		exit(2);
+		safe_exit(envp, 2);
 	}
 	if (argc > 2)
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
 		if (is_child)
-			exit(1);
+			safe_exit(envp, 1);
 		return (1);
 	}
 	code = normalize_code(exit_value);
-	exit(code);
+	safe_exit(envp, code);
+	return (0);
 }
