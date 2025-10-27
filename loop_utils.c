@@ -43,32 +43,43 @@ int	handle_eof(char *line)
 	return (0);
 }
 
-int	process_and_run(char *str, char ***envp_copy, int last_ret)
+	int	process_and_run(char *str, char ***envp_copy, int last_ret)
 {
 	t_cmds	*cmds;
 	char	*copy;
+	char	*original_copy;
 	int		ret;
 
 	add_history(str);
 	copy = ft_strdup(str);
 	if (!copy)
 		return (1);
+	original_copy = copy;
 	cmds = new_parsing_ultra(&copy, NULL, envp_copy, last_ret);
-	if (cmds)
+	if (!cmds)
 	{
-		if (!prepare_pipes(cmds))
-		{
+		if (copy == original_copy)
+			free(original_copy);
+		else
 			free(copy);
-			free_all_commands(cmds);
-			exit(1);
-		}
-		while (cmds->previous)
-			cmds = cmds->previous;
-		ret = fork_and_exec_commands(cmds);
-		free_all_commands(cmds);
+		return (last_ret);
 	}
+	if (!prepare_pipes(cmds))
+	{
+		if (copy == original_copy)
+			free(original_copy);
+		else
+			free(copy);
+		free_all_commands(cmds);
+		exit(1);
+	}
+	while (cmds->previous)
+		cmds = cmds->previous;
+	ret = fork_and_exec_commands(cmds);
+	free_all_commands(cmds);
+	if (copy != original_copy)
+		free(copy);
 	else
-		ret = last_ret;
-	free(copy);
+		free(original_copy);
 	return (ret);
 }
