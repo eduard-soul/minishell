@@ -34,7 +34,10 @@ int	fe_spawn_all(t_cmds *c, int *pids)
 		if (pids[i] == -1)
 			return (fe_fork_error());
 		if (pids[i] == 0)
+		{
+			free(pids);
 			return (exec_commands(c, 0, 0, 1));
+		}
 		fe_close_prev(c);
 		if (c->std_input > 0)
 			close(c->std_input);
