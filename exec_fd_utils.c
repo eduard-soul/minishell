@@ -37,15 +37,7 @@ int	check_and_save_dup(t_cmds *cmds, int save_fd_in_out[2],
 			return (0);
 		safe_exit_with_cmds(cmds, 0);
 	}
-	if (cmds->previous && !cmds->std_input)
-	{
-		if (dup2(cmds->previous->fd[0], STDIN_FILENO) == -1)
-		{
-			perror("dup2");
-			safe_exit_with_cmds(cmds, 1);
-		}
-	}
-	else if (cmds->std_input > 0)
+	if (cmds->std_input > 0)
 	{
 		if (dup2(cmds->std_input, STDIN_FILENO) == -1)
 		{
@@ -54,6 +46,14 @@ int	check_and_save_dup(t_cmds *cmds, int save_fd_in_out[2],
 		}
 		close(cmds->std_input);
 		cmds->std_input = 0;
+	}
+	else if (cmds->previous)
+	{
+		if (dup2(cmds->previous->fd[0], STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			safe_exit_with_cmds(cmds, 1);
+		}
 	}
 	return (2);
 }

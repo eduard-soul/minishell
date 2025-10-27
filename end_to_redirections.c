@@ -34,7 +34,7 @@ int	end_to_redirections(char **red, int which)
 		}
 		i++;
 	}
-	if (which == '<' && fd == -1)
+	if (fd == -1)
 		return (0);
 	return (fd);
 }
