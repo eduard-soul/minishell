@@ -36,6 +36,8 @@ int	replace_var(char **str, size_t *i, char **envp, int last_ret)
 		free(*str);
 		*str = temp;
 	}
+	else if (temp != *str)
+		free(temp);
 	return (1);
 }
 

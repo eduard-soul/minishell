@@ -60,7 +60,7 @@ int	set_var(char ***env_ref, char *key, char *value)
 	int		pos;
 
 	envp = *env_ref;
-	entry = malloc(ft_strlen(key) + ft_strlen(value) + 2);
+	entry = malloc(sizeof(char) * (ft_strlen(key) + ft_strlen(value) + 2));
 	if (!entry)
 		return (-1);
 	set_var_second_part(entry, key, value);

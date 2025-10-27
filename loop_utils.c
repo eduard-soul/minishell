@@ -59,6 +59,7 @@ int	process_and_run(char *str, char ***envp_copy, int last_ret)
 		if (!prepare_pipes(cmds))
 		{
 			free(copy);
+			free_all_commands(cmds);
 			exit(1);
 		}
 		while (cmds->previous)
