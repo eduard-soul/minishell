@@ -36,24 +36,24 @@ char	*replace_in_envp_if_exist(char *envp, char **str, size_t k, size_t *i)
 	size_t	l;
 	size_t	m;
 
-	new_len = ft_strlen(*str) - (1 + k)
-		+ (ft_strlen(envp) - (k + 1));
-	dest = malloc(sizeof(char) * (new_len + 1));
-	if (!dest)
-		return (NULL);
-	l = 0;
-	while (l++ < (size_t)(*i - 1))
-	{
-		dest[l] = (*str)[l];
-		l++;
-	}
-	m = k + 1;
-	while (envp[m])
-		dest[l++] = envp[m++];
-	m = *i + k;
-	while ((*str)[m])
-		dest[l++] = (*str)[m++];
-	dest[l] = '\0';
+    new_len = ft_strlen(*str) - (1 + k)
+        + (ft_strlen(envp) - (k + 1));
+    dest = malloc(sizeof(char) * (new_len + 1));
+    if (!dest)
+        return (NULL);
+    l = 0;
+    while (l < (size_t)(*i - 1))
+    {
+        dest[l] = (*str)[l];
+        l++;
+    }
+    m = k + 1;
+    while (envp[m])
+        dest[l++] = envp[m++];
+    m = *i + k;
+    while ((*str)[m])
+        dest[l++] = (*str)[m++];
+    dest[l] = '\0';
 	*i = *i - 1 + (ft_strlen(envp) - (k + 1));
 	return (dest);
 }
@@ -63,15 +63,20 @@ char	*replace_in_envp_if_not_exist(char **str, size_t k, size_t *i)
 	char	*dest;
 	size_t	l;
 	size_t	m;
+	size_t	new_len;
 
 	while (is_good_env_char((*str)[*i + k], !k))
 		k++;
-	dest = malloc(sizeof(char) * (k + 1));
+	new_len = ft_strlen(*str) - k - 1;
+	dest = malloc(sizeof(char) * (new_len + 1));
 	if (!dest)
 		return (NULL);
-	l = -1;
-	while (++l < (size_t)(*i - 1))
+	l = 0;
+	while (l < (size_t)(*i - 1))
+	{
 		dest[l] = (*str)[l];
+		l++;
+	}
 	m = *i + k;
 	while ((*str)[m])
 		dest[l++] = (*str)[m++];
@@ -118,14 +123,26 @@ t_cmds	*new_parsing_ultra(char **str, t_cmds *cmds, char ***envp,
 	{
 		if (!add_elem_to_cmds(&cmds, nb_x_until_pipe(*str, i, 1),
 				nb_x_until_pipe(*str, i, 0), envp))
+		{
+			if (cmds)
+			{
+				while (cmds->previous)
+					cmds = cmds->previous;
+				free_all_commands(cmds);
+			}
 			return (0);
-		if (!cmds)
-			printf("pb malloc\n");
+		}
 		cmds->std_input = 0;
 		while (cmds && cmds->next)
 			cmds = cmds->next;
-		store_args(*str, i, cmds->argv);
-		store_redirections(*str, &i, cmds->redirections);
+		if (!store_args(*str, i, cmds->argv)
+			|| !store_redirections(*str, &i, cmds->redirections))
+		{
+			while (cmds->previous)
+				cmds = cmds->previous;
+			free_all_commands(cmds);
+			return (0);
+		}
 		while ((*str)[i] && (*str)[i] == ' ')
 			i++;
 		if ((*str)[i] == '|')
