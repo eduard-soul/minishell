@@ -55,7 +55,12 @@ int	store_args(char *str, int i, char **argv)
 		{
 			i = 0;
 			while ((size_t)i != j)
-				free(argv[i++]);
+			{
+				free(argv[i]);
+				argv[i] = NULL;
+				i++;
+			}
+			argv[j] = NULL;
 			return (0);
 		}
 		if ((argv)[j])
