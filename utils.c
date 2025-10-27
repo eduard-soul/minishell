@@ -19,6 +19,22 @@ void	safe_exit(char ***envp, int ret)
 	exit(ret);
 }
 
+void	safe_exit_with_cmds(t_cmds *cmds, int ret)
+{
+	t_cmds	*first;
+
+	if (cmds)
+	{
+		first = cmds;
+		while (first->previous)
+			first = first->previous;
+		if (cmds->envp && *(cmds->envp))
+			free_array(*(cmds->envp));
+		free_all_commands(first);
+	}
+	exit(ret);
+}
+
 void	perror_and_exit(char *str, int ret)
 {
 	perror(str);

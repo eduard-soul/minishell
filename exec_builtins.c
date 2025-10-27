@@ -33,10 +33,11 @@ int	is_built_in(char *str)
 	return (0);
 }
 
-int	exec_builtin(char **argv, int fd, char ***envp, int is_child)
+int	exec_builtin_impl(char **argv, int fd, char ***envp,
+						int is_child, t_cmds *cmds)
 {
 	if (!argv || !argv[0])
-		safe_exit(envp, 127);
+		safe_exit_with_cmds(cmds, 127);
 	if (!ft_strcmp(argv[0], "echo"))
 		return (ft_echo_ultra(argv, fd));
 	if (!ft_strcmp(argv[0], "exit"))
@@ -52,4 +53,9 @@ int	exec_builtin(char **argv, int fd, char ***envp, int is_child)
 	if (!ft_strcmp(argv[0], "env"))
 		return (ft_env(*envp, fd));
 	return (0);
+}
+
+int	exec_builtin(char **argv, int fd, char ***envp, int is_child)
+{
+	return (exec_builtin_impl(argv, fd, envp, is_child, NULL));
 }
