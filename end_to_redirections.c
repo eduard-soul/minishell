@@ -20,7 +20,7 @@ int	end_to_redirections(char **red, int which)
 
 	fd = -1;
 	if (!red)
-		return (-1);
+		return (0);
 	if (!red[0])
 		return (0);
 	i = 0;

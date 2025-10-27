@@ -50,7 +50,10 @@ void	safe_close(int fd)
 void	check_and_close_fds(t_cmds *cmds)
 {
 	if (cmds->std_input > 0)
+	{
 		close(cmds->std_input);
+		cmds->std_input = 0;
+	}
 	if (cmds->previous)
 	{
 		safe_close(cmds->previous->fd[0]);

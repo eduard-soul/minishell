@@ -37,12 +37,23 @@ int	check_and_save_dup(t_cmds *cmds, int save_fd_in_out[2],
 			return (0);
 		safe_exit_with_cmds(cmds, 0);
 	}
-	if ((cmds->previous && !cmds->std_input
-			&& dup2(cmds->previous->fd[0], STDIN_FILENO) == -1)
-		|| ((cmds->std_input > 0 && dup2(cmds->std_input, STDIN_FILENO) == -1)))
+	if (cmds->previous && !cmds->std_input)
 	{
-		perror("dup2");
-		safe_exit_with_cmds(cmds, 1);
+		if (dup2(cmds->previous->fd[0], STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			safe_exit_with_cmds(cmds, 1);
+		}
+	}
+	else if (cmds->std_input > 0)
+	{
+		if (dup2(cmds->std_input, STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			safe_exit_with_cmds(cmds, 1);
+		}
+		close(cmds->std_input);
+		cmds->std_input = 0;
 	}
 	return (2);
 }
@@ -115,7 +126,7 @@ int	exec_commands(t_cmds *cmds, int is_alone_builtin, int ret, int is_child)
 	if (is_built_in(cmds->argv[0]))
 		return (exec_builtin_and_close_fds(cmds, is_child, is_alone_builtin,
 				save_fd_in_out));
-	else if (ft_search_char_in_str(cmds->argv[0], '/'))
+	if (ft_search_char_in_str(cmds->argv[0], '/'))
 		exec_absolute_path(cmds);
 	else
 		search_path_and_exec(cmds);
