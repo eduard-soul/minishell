@@ -75,19 +75,29 @@ int	search_and_replace_var(char **str, char **envp, int last_ret, size_t i)
 			j = i - 1;
 			while ((*str)[++j])
 				(*str)[j] = (*str)[j + 1];
+			i++;
 		}
-		else if ((*str)[i] == '$' && !replace_var(str, &i, envp, last_ret))
-			return (0);
+		else if ((*str)[i] == '$')
+		{
+			if (!replace_var(str, &i, envp, last_ret))
+				return (0);
+		}
 		else if ((*str)[i] == '\'')
 		{
 			i++;
 			while ((*str)[i] && (*str)[i] != '\'')
 				i++;
+			if ((*str)[i])
+				i++;
 		}
-		else if ((*str)[i] == '\"'
-			&& (!search_and_replace_var_double_quotes(str, &i, envp, last_ret)))
-			return (0);
-		if ((*str)[i])
+		else if ((*str)[i] == '\"')
+		{
+			if (!search_and_replace_var_double_quotes(str, &i, envp, last_ret))
+				return (0);
+			if ((*str)[i])
+				i++;
+		}
+		else
 			i++;
 	}
 	return (1);
