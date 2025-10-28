@@ -49,10 +49,24 @@ void	safe_close(int fd)
 
 void	check_and_close_fds(t_cmds *cmds)
 {
+	t_cmds	*tmp;
+
 	if (cmds->std_input > 0)
 	{
 		close(cmds->std_input);
 		cmds->std_input = 0;
+	}
+	tmp = cmds;
+	while (tmp->previous)
+		tmp = tmp->previous;
+	while (tmp)
+	{
+		if (tmp != cmds && tmp->next && tmp->fd[0] > 2)
+		{
+			safe_close(tmp->fd[0]);
+			safe_close(tmp->fd[1]);
+		}
+		tmp = tmp->next;
 	}
 	if (cmds->previous)
 	{

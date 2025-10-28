@@ -54,6 +54,8 @@ int	check_and_save_dup(t_cmds *cmds, int save_fd_in_out[2],
 			perror("dup2");
 			safe_exit_with_cmds(cmds, 1);
 		}
+	else if (!is_alone_builtin && cmds->next && !cmds->previous)
+		close(STDIN_FILENO);
 	}
 	return (2);
 }
