@@ -6,7 +6,7 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:24:21 by edtataru          #+#    #+#             */
-/*   Updated: 2025/10/28 13:38:49 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 15:51:53 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,5 +198,8 @@ void	put_err_for_exit(t_cmds *cmds, char **argv, int code);
 int		normalize_code(long long number);
 void	safe_close(int fd);
 void	safe_close_both_fds(int fd1, int fd2);
+void	dup_and_close(int save_fd_in, int save_fd_out);
+int		check_and_save_dup(t_cmds *cmds, int save_fd_in_out[2],
+			int is_alone_builtin, int *is_child);
 
 #endif

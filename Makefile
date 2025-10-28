@@ -14,7 +14,8 @@ SRC= ultra.c ./ft_cd.c ./utils.c ./ft_env.c ./signal.c ./ft_pwd.c ./ft_exit.c \
 	./end_to_redirections.c ./ft_cd_utils.c ./arg_copy.c ./redir_copy.c ./words_utils.c ./scan_helpers.c \
 	./ft_export_utils1.c ./free.c ./loop_utils.c ./spawn_fork_and_reject.c ./pipes_exec.c \
 	./fork_init.c ./exec_fd_utils.c ./exec_builtins.c ./wait_and_heredoc.c \
-	./execs_builtins_utils.c ./path_exec.c ./ft_export_utils2.c
+	./execs_builtins_utils.c ./path_exec.c ./ft_export_utils2.c ./ft_exit_utils.c \
+	./safe_utils.c ./save_and_close_dup.c
 
 INCLUDES=./minishell.h\
 
