@@ -6,7 +6,7 @@
 /*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 18:23:36 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/23 19:20:09 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 12:26:53 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ void	search_path_and_exec(t_cmds *cmds)
 	path = is_in_path(cmds->argv[0], *(cmds->envp),
 			NULL, is_there_a_path(*(cmds->envp)));
 	if (!path)
-		safe_put_err_n_viable_cmds(cmds, cmds->argv[0], ": command not found", 127);
+		safe_put_err_n_viable_cmds(cmds,
+			cmds->argv[0], ": command not found", 127);
 	if (execve(path, cmds->argv, *(cmds->envp)) == -1)
 	{
 		ret = errno;
@@ -65,11 +66,14 @@ void	search_path_and_exec(t_cmds *cmds)
 void	exec_absolute_path(t_cmds *cmds)
 {
 	if (access(cmds->argv[0], F_OK) != 0)
-		safe_put_err_n_viable_cmds(cmds, cmds->argv[0], ": No such file or directory", 127);
+		safe_put_err_n_viable_cmds(cmds,
+			cmds->argv[0], ": No such file or directory", 127);
 	if (is_directory(cmds->argv[0]))
-		safe_put_err_n_viable_cmds(cmds, cmds->argv[0], ": Is a directory", 126);
+		safe_put_err_n_viable_cmds(cmds,
+			cmds->argv[0], ": Is a directory", 126);
 	if (access(cmds->argv[0], X_OK) != 0)
-		safe_put_err_n_viable_cmds(cmds, cmds->argv[0], ": Permission denied", 126);
+		safe_put_err_n_viable_cmds(cmds,
+			cmds->argv[0], ": Permission denied", 126);
 	if (execve(cmds->argv[0], cmds->argv, *(cmds->envp)) == -1)
 	{
 		if (errno == EACCES || errno == EISDIR)

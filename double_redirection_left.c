@@ -6,7 +6,7 @@
 /*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 04:28:41 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/23 04:34:23 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 12:34:25 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ void	hd_child(int wfd, char *delim, char ***envp, t_cmds *cmds)
 	close(wfd);
 	if (cmds)
 	{
-		while(cmds->previous)
+		while (cmds->previous)
 			cmds = cmds->previous;
-		free_all_commands(cmds);		
+		free_all_commands(cmds);
 	}
 	safe_exit(envp, 0);
 }

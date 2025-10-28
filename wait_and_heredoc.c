@@ -6,7 +6,7 @@
 /*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 18:26:07 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/23 18:28:07 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 13:06:18 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	add_fd_of_heredocs(t_cmds *cmds)
 	copy = cmds;
 	while (copy)
 	{
-		status = end_to_redirections(copy->redirections, '<', copy->envp, cmds);
+		status = end_to_redirections(copy->redirections, '<', cmds);
 		if (status == -130)
 			return (130);
 		if (status < 0)

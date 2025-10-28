@@ -6,7 +6,7 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 12:36:44 by edtataru          #+#    #+#             */
-/*   Updated: 2025/10/25 18:01:07 by edtataru         ###   ########.fr       */
+/*   Updated: 2025/10/28 12:26:09 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,24 +36,24 @@ char	*replace_in_envp_if_exist(char *envp, char **str, size_t k, size_t *i)
 	size_t	l;
 	size_t	m;
 
-    new_len = ft_strlen(*str) - (1 + k)
-        + (ft_strlen(envp) - (k + 1));
-    dest = malloc(sizeof(char) * (new_len + 1));
-    if (!dest)
-        return (NULL);
-    l = 0;
-    while (l < (size_t)(*i - 1))
-    {
-        dest[l] = (*str)[l];
-        l++;
-    }
-    m = k + 1;
-    while (envp[m])
-        dest[l++] = envp[m++];
-    m = *i + k;
-    while ((*str)[m])
-        dest[l++] = (*str)[m++];
-    dest[l] = '\0';
+	new_len = ft_strlen(*str) - (1 + k)
+		+ (ft_strlen(envp) - (k + 1));
+	dest = malloc(sizeof(char) * (new_len + 1));
+	if (!dest)
+		return (NULL);
+	l = 0;
+	while (l < (size_t)(*i - 1))
+	{
+		dest[l] = (*str)[l];
+		l++;
+	}
+	m = k + 1;
+	while (envp[m])
+		dest[l++] = envp[m++];
+	m = *i + k;
+	while ((*str)[m])
+		dest[l++] = (*str)[m++];
+	dest[l] = '\0';
 	*i = *i - 1 + (ft_strlen(envp) - (k + 1));
 	return (dest);
 }

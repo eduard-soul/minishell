@@ -6,7 +6,7 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 11:05:25 by edtataru          #+#    #+#             */
-/*   Updated: 2025/10/22 16:53:04 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 12:29:54 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	redirect_left(char *filename, t_minishell *minishell)
 	return (1);
 }
 
-int	open_redir(char *t, int which, int *fd, char ***envp, t_cmds *cmds)
+int	open_redir(char *t, int which, int *fd, t_cmds *cmds)
 {
 	char	*delimiter;
 
@@ -106,7 +106,7 @@ int	open_redir(char *t, int which, int *fd, char ***envp, t_cmds *cmds)
 		delimiter = t + 2;
 		while (*delimiter == ' ')
 			delimiter++;
-		*fd = double_redirect_left_ultra(delimiter, envp, cmds);
+		*fd = double_redirect_left_ultra(delimiter, cmds->envp, cmds);
 	}
 	else
 		*fd = open(t + 1, O_RDONLY);

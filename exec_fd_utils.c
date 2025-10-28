@@ -6,29 +6,59 @@
 /*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 18:25:04 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/23 19:14:14 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 13:38:30 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	save_stdio_if_alone(int save_fd_in_out[2], int *is_child)
+{
+	*is_child = 0;
+	save_fd_in_out[0] = dup(STDIN_FILENO);
+	save_fd_in_out[1] = dup(STDOUT_FILENO);
+	if (save_fd_in_out[0] == -1 || save_fd_in_out[1] == -1)
+	{
+		perror("dup");
+		if (save_fd_in_out[0] != -1)
+			close(save_fd_in_out[0]);
+		if (save_fd_in_out[1] != -1)
+			close(save_fd_in_out[1]);
+		return (1);
+	}
+	return (0);
+}
+
+void	apply_stdin_from_cmd(t_cmds *cmds)
+{
+	if (cmds->std_input > 0)
+	{
+		if (dup2(cmds->std_input, STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			safe_exit_with_cmds(cmds, 1);
+		}
+		close(cmds->std_input);
+		cmds->std_input = 0;
+	}
+	else if (cmds->previous)
+	{
+		if (dup2(cmds->previous->fd[0], STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			safe_exit_with_cmds(cmds, 1);
+		}
+		close(cmds->previous->fd[0]);
+	}
+}
 
 int	check_and_save_dup(t_cmds *cmds, int save_fd_in_out[2],
 			int is_alone_builtin, int *is_child)
 {
 	if (is_alone_builtin)
 	{
-		*is_child = 0;
-		save_fd_in_out[0] = dup(STDIN_FILENO);
-		save_fd_in_out[1] = dup(STDOUT_FILENO);
-		if (save_fd_in_out[0] == -1 || save_fd_in_out[1] == -1)
-		{
-			perror("dup");
-			if (save_fd_in_out[0] != -1)
-				close(save_fd_in_out[0]);
-			if (save_fd_in_out[1] != -1)
-				close(save_fd_in_out[1]);
+		if (save_stdio_if_alone(save_fd_in_out, is_child))
 			return (1);
-		}
 	}
 	if (!cmds->argv || !cmds->argv[0])
 	{
@@ -47,16 +77,7 @@ int	check_and_save_dup(t_cmds *cmds, int save_fd_in_out[2],
 		close(cmds->std_input);
 		cmds->std_input = 0;
 	}
-	else if (cmds->previous)
-	{
-		if (dup2(cmds->previous->fd[0], STDIN_FILENO) == -1)
-		{
-			perror("dup2");
-			safe_exit_with_cmds(cmds, 1);
-		}
-	else if (!is_alone_builtin && cmds->next && !cmds->previous)
-		close(STDIN_FILENO);
-	}
+	apply_stdin_from_cmd(cmds);
 	return (2);
 }
 
@@ -73,7 +94,7 @@ int	get_fd_and_process(t_cmds *cmds, int is_alone_builtin,
 {
 	int	fd;
 
-	fd = end_to_redirections(cmds->redirections, '>', NULL, NULL);
+	fd = end_to_redirections(cmds->redirections, '>', NULL);
 	if (fd < 0)
 	{
 		check_and_close_fds(cmds);
@@ -106,9 +127,9 @@ int	exec_builtin_and_close_fds(t_cmds *cmds, int is_child, int is_alone_builtin,
 	{
 		check_and_close_fds(cmds);
 		dup_and_close(save_fd_in_out[0], save_fd_in_out[1]);
-		return (exec_builtin_impl(cmds->argv, STDOUT_FILENO, cmds->envp, is_child, cmds));
+		return (exec_builtin_impl(cmds->argv, STDOUT_FILENO, is_child, cmds));
 	}
-	ret = exec_builtin_impl(cmds->argv, STDOUT_FILENO, cmds->envp, is_child, cmds);
+	ret = exec_builtin_impl(cmds->argv, STDOUT_FILENO, is_child, cmds);
 	check_and_close_fds(cmds);
 	if (is_alone_builtin)
 		dup_and_close(save_fd_in_out[0], save_fd_in_out[1]);

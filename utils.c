@@ -6,46 +6,11 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 12:03:45 by edtataru          #+#    #+#             */
-/*   Updated: 2025/10/23 20:05:11 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 13:14:50 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	safe_exit(char ***envp, int ret)
-{
-	if (envp && *envp)
-		free_array(*envp);
-	exit(ret);
-}
-
-void	safe_exit_with_cmds(t_cmds *cmds, int ret)
-{
-	t_cmds	*first;
-
-	if (cmds)
-	{
-		first = cmds;
-		while (first->previous)
-			first = first->previous;
-		if (cmds->envp && *(cmds->envp))
-			free_array(*(cmds->envp));
-		free_all_commands(first);
-	}
-	exit(ret);
-}
-
-void	perror_and_exit(char *str, int ret)
-{
-	perror(str);
-	exit(ret);
-}
-
-void	safe_close(int fd)
-{
-	if (fd > 2)
-		close(fd);
-}
 
 void	check_and_close_fds(t_cmds *cmds)
 {
@@ -62,22 +27,13 @@ void	check_and_close_fds(t_cmds *cmds)
 	while (tmp)
 	{
 		if (tmp != cmds && tmp->next && tmp->fd[0] > 2)
-		{
-			safe_close(tmp->fd[0]);
-			safe_close(tmp->fd[1]);
-		}
+			safe_close_both_fds(tmp->fd[0], tmp->fd[1]);
 		tmp = tmp->next;
 	}
 	if (cmds->previous)
-	{
-		safe_close(cmds->previous->fd[0]);
-		safe_close(cmds->previous->fd[1]);
-	}
+		safe_close_both_fds(cmds->previous->fd[0], cmds->previous->fd[1]);
 	if (cmds->next)
-	{
-		safe_close(cmds->fd[0]);
-		safe_close(cmds->fd[1]);
-	}
+		safe_close_both_fds(cmds->fd[0], cmds->fd[1]);
 }
 
 char	**copy_array_string(char **array)

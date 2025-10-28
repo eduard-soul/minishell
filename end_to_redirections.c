@@ -6,13 +6,13 @@
 /*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 13:59:10 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/23 13:59:26 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 13:05:17 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	end_to_redirections(char **red, int which, char ***envp, t_cmds *cmds)
+int	end_to_redirections(char **red, int which, t_cmds *cmds)
 {
 	int	fd;
 	int	i;
@@ -28,7 +28,7 @@ int	end_to_redirections(char **red, int which, char ***envp, t_cmds *cmds)
 	{
 		if (red[i][0] == which)
 		{
-			r = open_redir(red[i], which, &fd, envp, cmds);
+			r = open_redir(red[i], which, &fd, cmds);
 			if (r < 0)
 				return (r);
 		}

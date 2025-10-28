@@ -6,7 +6,7 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:24:21 by edtataru          #+#    #+#             */
-/*   Updated: 2025/10/23 22:16:43 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 13:38:49 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	perror_and_exit(char *str, int ret);
 void	safe_exit(char ***envp, int ret);
 void	safe_exit_with_cmds(t_cmds *cmds, int ret);
 void	check_and_close_fds(t_cmds *cmds);
-int		end_to_redirections(char **redirections, int which, char ***envp, t_cmds *cmds);
+int		end_to_redirections(char **redirections, int which, t_cmds *cmds);
 int		double_redirect_left_ultra(char *delimiter, char ***envp, t_cmds *cmds);
 int		ft_echo_ultra(char **argv, int fd);
 int		ft_env(char **envp, int fd);
@@ -138,7 +138,7 @@ int		count_words(char *str, char delim);
 char	**free_split(char **result, int j);
 char	*ft_malloc_len_word(char *str, int i, char delim);
 void	heredoc_sigint(int signum);
-int		open_redir(char *t, int which, int *fd, char ***envp, t_cmds *cmds);
+int		open_redir(char *t, int which, int *fd, t_cmds *cmds);
 int		find_key(char **envp, char *key);
 int		arg_count(char **argv);
 int		set_var(char ***env_ref, char *key, char *value);
@@ -169,7 +169,8 @@ void	free_all_commands(t_cmds *cmds);
 char	*ft_strjoin_w_char(char *s1, char c, char *s2);
 int		is_there_a_path(char **envp);
 void	put_err_n_viable(char *argv, char *error_msg, int exit_code);
-void	safe_put_err_n_viable_cmds(t_cmds *cmds, char *argv, char *err, int code);
+void	safe_put_err_n_viable_cmds(t_cmds *cmds, char *argv,
+			char *err, int code);
 int		is_directory(char *path);
 void	fe_skip_node(t_cmds **c);
 void	fe_close_prev(t_cmds *c);
@@ -180,9 +181,8 @@ int		name_len_until_equal_or_plus(char *s);
 int		find_key_index(char **envp, char *key);
 char	*build_assignment(char *key, char *value);
 char	**append_to_envp(char **envp, char *to_add);
-int		exec_builtin(char **argv, int fd, char ***envp, int is_child);
-int		exec_builtin_impl(char **argv, int fd, char ***envp,
-			int is_child, t_cmds *cmds);
+int		exec_builtin(char **argv, int fd, int is_child);
+int		exec_builtin_impl(char **argv, int fd, int is_child, t_cmds *cmds);
 int		free_and_ret(char *str, int ret);
 int		handle_no_equal(char ***p_envp, char *name);
 int		put_err_and_free_name(char *str, char *name);
@@ -191,5 +191,12 @@ int		handle_plus_equal(char ***p_envp, char *name,
 			char *value, char *existing);
 int		replace_or_append(char ***p_envp, char *name, char *value, int idx);
 void	rl_replace_line(const char *text, int clear_undo);
+int		argument_count(char **argv);
+int		is_numeric_argument(char *str);
+int		parse_exit_val(char *str, long long *value);
+void	put_err_for_exit(t_cmds *cmds, char **argv, int code);
+int		normalize_code(long long number);
+void	safe_close(int fd);
+void	safe_close_both_fds(int fd1, int fd2);
 
 #endif

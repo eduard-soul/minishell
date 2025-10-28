@@ -6,7 +6,7 @@
 /*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 18:21:44 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/23 19:14:45 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 12:40:44 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int	is_directory(char *path)
 	return (S_ISDIR(st.st_mode) != 0);
 }
 
-void	safe_put_err_n_viable_cmds(t_cmds *cmds, char *argv, char *err, int code)
+void	safe_put_err_n_viable_cmds(t_cmds *cmds, char *argv,
+			char *err, int code)
 {
 	ft_putstr_fd("Minishell: ", STDERR_FILENO);
 	ft_putstr_fd(argv, STDERR_FILENO);
