@@ -6,7 +6,7 @@
 /*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 04:28:41 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/28 12:34:25 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:16:54 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,9 @@ void	hd_setup_heredoc_signals(void)
 		perror("signal");
 }
 
-void	hd_child(int wfd, char *delim, char ***envp, t_cmds *cmds)
+void	hd_child(int wfd, char *delim, t_cmds *cmds)
 {
 	char		*line;
-	ssize_t		len;
 
 	hd_setup_heredoc_signals();
 	while (1)
@@ -36,27 +35,20 @@ void	hd_child(int wfd, char *delim, char ***envp, t_cmds *cmds)
 		line = readline("> ");
 		if (!line || !ft_strcmp(line, delim))
 		{
-			if (line)
-				free(line);
+			free(line);
 			break ;
 		}
-		len = ft_strlen(line);
-		if (write(wfd, line, len) != len || write(wfd, "\n", 1) != 1)
+		if (write(wfd, line, ft_strlen(line)) != ft_strlen(line)
+			|| write(wfd, "\n", 1) != 1)
 		{
 			free(line);
 			close(wfd);
-			safe_exit(envp, 1);
+			safe_exit_with_cmds(cmds, 1);
 		}
 		free(line);
 	}
 	close(wfd);
-	if (cmds)
-	{
-		while (cmds->previous)
-			cmds = cmds->previous;
-		free_all_commands(cmds);
-	}
-	safe_exit(envp, 0);
+	safe_exit_with_cmds(cmds, 0);
 }
 
 int	hd_parent_wait(int rfd, pid_t pid)
@@ -80,7 +72,7 @@ int	hd_parent_wait(int rfd, pid_t pid)
 	return (rfd);
 }
 
-int	double_redirect_left_ultra(char *delimiter, char ***envp, t_cmds *cmds)
+int	double_redirect_left_ultra(char *delimiter, t_cmds *cmds)
 {
 	pid_t	pid;
 	int		fd[2];
@@ -99,7 +91,7 @@ int	double_redirect_left_ultra(char *delimiter, char ***envp, t_cmds *cmds)
 	if (pid == 0)
 	{
 		close(fd[0]);
-		hd_child(fd[1], delimiter, envp, cmds);
+		hd_child(fd[1], delimiter, cmds);
 	}
 	close(fd[1]);
 	return (hd_parent_wait(fd[0], pid));

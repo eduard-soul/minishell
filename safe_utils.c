@@ -6,7 +6,7 @@
 /*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 13:12:58 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/28 13:13:13 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:22:07 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,16 @@ void	safe_exit(char ***envp, int ret)
 void	safe_exit_with_cmds(t_cmds *cmds, int ret)
 {
 	t_cmds	*first;
+	char	***envp;
 
 	if (cmds)
 	{
 		first = cmds;
 		while (first->previous)
 			first = first->previous;
-		if (cmds->envp && *(cmds->envp))
-			free_array(*(cmds->envp));
+		envp = first->envp;
 		free_all_commands(first);
+		safe_exit(envp, ret);
 	}
 	exit(ret);
 }

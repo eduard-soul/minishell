@@ -6,7 +6,7 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:24:21 by edtataru          #+#    #+#             */
-/*   Updated: 2025/10/28 15:51:53 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:17:05 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	safe_exit(char ***envp, int ret);
 void	safe_exit_with_cmds(t_cmds *cmds, int ret);
 void	check_and_close_fds(t_cmds *cmds);
 int		end_to_redirections(char **redirections, int which, t_cmds *cmds);
-int		double_redirect_left_ultra(char *delimiter, char ***envp, t_cmds *cmds);
+int		double_redirect_left_ultra(char *delimiter, t_cmds *cmds);
 int		ft_echo_ultra(char **argv, int fd);
 int		ft_env(char **envp, int fd);
 int		ft_unset(char **argv, char ***envp, int i);
