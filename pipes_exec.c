@@ -6,7 +6,7 @@
 /*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 18:31:07 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/23 19:20:16 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 19:18:31 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	free_all_commands(t_cmds *cmds)
 		next = cmds->next;
 		if (cmds->std_input > 0)
 			close(cmds->std_input);
+		safe_close_both_fds(cmds->fd[0], cmds->fd[1]);
 		if (cmds->argv)
 			free_array(cmds->argv);
 		if (cmds->redirections)

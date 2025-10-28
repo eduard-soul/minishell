@@ -6,7 +6,7 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 12:36:44 by edtataru          #+#    #+#             */
-/*   Updated: 2025/10/28 12:26:09 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 20:21:48 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,50 +109,4 @@ char	*search_in_envp_and_replace(char **str, size_t *i, char **envp,
 	}
 	k = 0;
 	return (replace_in_envp_if_not_exist(str, k, i));
-}
-
-void	new_parsing_ultra_part2(t_cmds *cmds, char **str, size_t *i, char ***envp)
-{
-	
-		if (!add_elem_to_cmds(&cmds, nb_x_until_pipe(*str, i, 1),
-				nb_x_until_pipe(*str, i, 0), envp))
-		{
-			if (cmds)
-			{
-				while (cmds->previous)
-					cmds = cmds->previous;
-				free_all_commands(cmds);
-			}
-			return (0);
-		}
-		cmds->std_input = 0;
-		while (cmds && cmds->next)
-			cmds = cmds->next;
-		if (!store_args(*str, i, cmds->argv) || !store_redirections(*str, &i, cmds->redirections))
-		{
-			while (cmds->previous)
-				cmds = cmds->previous;
-			free_all_commands(cmds);
-			return (0);
-		}
-		while ((*str)[i] && (*str)[i] == ' ')
-			i++;
-		if ((*str)[i] == '|')
-			i++;
-}
-
-t_cmds	*new_parsing_ultra(char **str, t_cmds *cmds, char ***envp,
-			int last_ret)
-{
-	size_t	i;
-
-	if (!search_and_replace_var(str, *envp, last_ret, 0))
-		return (0);
-	i = 0;
-	while ((*str)[i])
-	{
-	}
-	while (cmds && cmds->previous)
-		cmds = cmds->previous;
-	return (cmds);
 }

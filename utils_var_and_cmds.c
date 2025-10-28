@@ -6,7 +6,7 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 17:50:03 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/25 14:37:17 by edtataru         ###   ########.fr       */
+/*   Updated: 2025/10/28 19:17:06 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,9 @@ t_cmds	*add_elem_to_cmds(t_cmds **cmds, int size_argv, int size_redir,
 	tmp->redirections = malloc(sizeof(char *) * (size_redir + 1));
 	if (!tmp->redirections)
 		free_and_null(tmp->argv);
+	tmp->fd[0] = -1;
+	tmp->fd[1] = -1;
+	tmp->std_input = 0;
 	if (!tmp->redirections)
 		return (free_and_null(tmp));
 	while (*cmds && (*cmds)->next)

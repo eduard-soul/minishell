@@ -6,7 +6,7 @@
 /*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 18:25:04 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/28 15:52:01 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 20:32:33 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,34 @@ int	exec_builtin_and_close_fds(t_cmds *cmds, int is_child, int is_alone_builtin,
 	return (0);
 }
 
+void	close_all_other_heredoc_fds(t_cmds *cmds, t_cmds *current)
+{
+	t_cmds	*tmp;
+
+	tmp = cmds;
+	while (tmp->previous)
+		tmp = tmp->previous;
+	while (tmp)
+	{
+		if (tmp != current && tmp->std_input > 0)
+		{
+			close(tmp->std_input);
+			tmp->std_input = 0;
+		}
+		tmp = tmp->next;
+	}
+}
+
+void	close_other_heredocs(t_cmds *cmds)
+{
+	t_cmds	*first;
+
+	first = cmds;
+	while (first->previous)
+		first = first->previous;
+	close_all_other_heredoc_fds(first, cmds);
+}
+
 int	exec_commands(t_cmds *cmds, int is_alone_builtin, int ret, int is_child)
 {
 	int		save_fd_in_out[2];
@@ -72,6 +100,8 @@ int	exec_commands(t_cmds *cmds, int is_alone_builtin, int ret, int is_child)
 			is_alone_builtin, &is_child);
 	if (ret != 2)
 		return (ret);
+	if (!is_alone_builtin)
+		close_other_heredocs(cmds);
 	ret = get_fd_and_process(cmds, is_alone_builtin, save_fd_in_out[0],
 			save_fd_in_out[1]);
 	if (ret)

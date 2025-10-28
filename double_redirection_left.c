@@ -6,7 +6,7 @@
 /*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 04:28:41 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/28 16:16:54 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/28 19:46:30 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,19 @@ void	hd_setup_heredoc_signals(void)
 void	hd_child(int wfd, char *delim, t_cmds *cmds)
 {
 	char		*line;
+	t_cmds		*tmp;
 
+	tmp = cmds;
+	while (tmp->previous)
+		tmp = tmp->previous;
+	while (tmp)
+	{
+		if (tmp->fd[0] > 2)
+			close(tmp->fd[0]);
+		if (tmp->fd[1] > 2)
+			close(tmp->fd[1]);
+		tmp = tmp->next;
+	}
 	hd_setup_heredoc_signals();
 	while (1)
 	{
