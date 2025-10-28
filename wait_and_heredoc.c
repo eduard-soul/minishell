@@ -47,7 +47,7 @@ int	add_fd_of_heredocs(t_cmds *cmds)
 	copy = cmds;
 	while (copy)
 	{
-		status = end_to_redirections(copy->redirections, '<');
+		status = end_to_redirections(copy->redirections, '<', copy->envp, cmds);
 		if (status == -130)
 			return (130);
 		if (status < 0)

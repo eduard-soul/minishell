@@ -41,7 +41,11 @@ int	exec_builtin_impl(char **argv, int fd, char ***envp,
 	if (!ft_strcmp(argv[0], "echo"))
 		return (ft_echo_ultra(argv, fd));
 	if (!ft_strcmp(argv[0], "exit"))
-		return (ft_exit(argv, is_child, envp));
+	{
+		if (cmds)
+			check_and_close_fds(cmds);
+		return (ft_exit(argv, is_child, cmds));
+	}
 	if (!ft_strcmp(argv[0], "export"))
 		return (ft_export(argv, envp));
 	if (!ft_strcmp(argv[0], "unset"))

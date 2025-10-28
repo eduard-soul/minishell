@@ -46,7 +46,7 @@ int	handle_eof(char *line)
 	return (0);
 }
 
-	int	process_and_run(char *str, char ***envp_copy, int last_ret)
+int	process_and_run(char *str, char ***envp_copy, int last_ret)
 {
 	t_cmds	*cmds;
 	char	*copy;
@@ -61,18 +61,27 @@ int	handle_eof(char *line)
 	cmds = new_parsing_ultra(&copy, NULL, envp_copy, last_ret);
 	if (!cmds)
 	{
-		free(original_copy);
+		if (copy == original_copy)
+			free(original_copy);
+		else if (copy)
+			free(copy);
 		return (last_ret);
 	}
 	if (!prepare_pipes(cmds))
 	{
-		free(original_copy);
+		if (copy == original_copy)
+			free(original_copy);
+		else if (copy)
+			free(copy);
 		free_all_commands(cmds);
 		exit(1);
 	}
 	while (cmds->previous)
 		cmds = cmds->previous;
-	free(original_copy);
+	if (copy == original_copy)
+		free(original_copy);
+	else if (copy)
+		free(copy);
 	ret = fork_and_exec_commands(cmds);
 	free_all_commands(cmds);
 	return (ret);

@@ -88,7 +88,7 @@ int	redirect_left(char *filename, t_minishell *minishell)
 	return (1);
 }
 
-int	open_redir(char *t, int which, int *fd)
+int	open_redir(char *t, int which, int *fd, char ***envp, t_cmds *cmds)
 {
 	char	*delimiter;
 
@@ -106,7 +106,7 @@ int	open_redir(char *t, int which, int *fd)
 		delimiter = t + 2;
 		while (*delimiter == ' ')
 			delimiter++;
-		*fd = double_redirect_left_ultra(delimiter);
+		*fd = double_redirect_left_ultra(delimiter, envp, cmds);
 	}
 	else
 		*fd = open(t + 1, O_RDONLY);

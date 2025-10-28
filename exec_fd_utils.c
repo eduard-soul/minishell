@@ -71,7 +71,7 @@ int	get_fd_and_process(t_cmds *cmds, int is_alone_builtin,
 {
 	int	fd;
 
-	fd = end_to_redirections(cmds->redirections, '>');
+	fd = end_to_redirections(cmds->redirections, '>', NULL, NULL);
 	if (fd < 0)
 	{
 		check_and_close_fds(cmds);
@@ -99,6 +99,13 @@ int	exec_builtin_and_close_fds(t_cmds *cmds, int is_child, int is_alone_builtin,
 {
 	int	ret;
 
+	if (is_alone_builtin && cmds->argv && cmds->argv[0]
+		&& ft_strcmp(cmds->argv[0], "exit") == 0)
+	{
+		check_and_close_fds(cmds);
+		dup_and_close(save_fd_in_out[0], save_fd_in_out[1]);
+		return (exec_builtin_impl(cmds->argv, STDOUT_FILENO, cmds->envp, is_child, cmds));
+	}
 	ret = exec_builtin_impl(cmds->argv, STDOUT_FILENO, cmds->envp, is_child, cmds);
 	check_and_close_fds(cmds);
 	if (is_alone_builtin)

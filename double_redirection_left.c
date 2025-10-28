@@ -25,7 +25,7 @@ void	hd_setup_heredoc_signals(void)
 		perror("signal");
 }
 
-void	hd_child(int wfd, char *delim)
+void	hd_child(int wfd, char *delim, char ***envp, t_cmds *cmds)
 {
 	char		*line;
 	ssize_t		len;
@@ -45,12 +45,18 @@ void	hd_child(int wfd, char *delim)
 		{
 			free(line);
 			close(wfd);
-			exit(1);
+			safe_exit(envp, 1);
 		}
 		free(line);
 	}
 	close(wfd);
-	exit(0);
+	if (cmds)
+	{
+		while(cmds->previous)
+			cmds = cmds->previous;
+		free_all_commands(cmds);		
+	}
+	safe_exit(envp, 0);
 }
 
 int	hd_parent_wait(int rfd, pid_t pid)
@@ -74,7 +80,7 @@ int	hd_parent_wait(int rfd, pid_t pid)
 	return (rfd);
 }
 
-int	double_redirect_left_ultra(char *delimiter)
+int	double_redirect_left_ultra(char *delimiter, char ***envp, t_cmds *cmds)
 {
 	pid_t	pid;
 	int		fd[2];
@@ -93,7 +99,7 @@ int	double_redirect_left_ultra(char *delimiter)
 	if (pid == 0)
 	{
 		close(fd[0]);
-		hd_child(fd[1], delimiter);
+		hd_child(fd[1], delimiter, envp, cmds);
 	}
 	close(fd[1]);
 	return (hd_parent_wait(fd[0], pid));
