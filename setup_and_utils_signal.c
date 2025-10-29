@@ -6,7 +6,7 @@
 /*   By: edesprez <edesprez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 16:58:59 by edesprez          #+#    #+#             */
-/*   Updated: 2025/10/22 17:04:14 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/29 16:35:04 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	install_sigint_handler(void)
 
 void	setup_interactive_signals(void)
 {
-	set_mode(SIGM_INTERACTIVE);
+	set_mode((0 << 1));
 	install_sigint_handler();
 	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
 		perror("signal");
@@ -38,7 +38,7 @@ void	setup_interactive_signals(void)
 
 void	setup_parent_exec_signals(void)
 {
-	set_mode(SIGM_PARENT_EXEC);
+	set_mode(1 << 1);
 	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
 		perror("signal");
 	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)

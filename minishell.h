@@ -6,7 +6,7 @@
 /*   By: edtataru <edtataru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:24:21 by edtataru          #+#    #+#             */
-/*   Updated: 2025/10/28 16:17:05 by edesprez         ###   ########.fr       */
+/*   Updated: 2025/10/29 16:35:17 by edesprez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,6 @@ typedef struct s_minishell
 	char	**envp;
 	char	**new_envp;
 }	t_minishell;
-
-typedef enum e_sigmode
-{
-	SIGM_INTERACTIVE = 0,
-	SIGM_PARENT_EXEC = 1
-}	t_sigmode;
-
-typedef struct s_sigstate
-{
-	sig_atomic_t	flag;
-	sig_atomic_t	mode;
-}	t_sigstate;
 
 int		get_signal_flag(void);
 void	reset_signal_flag(void);
