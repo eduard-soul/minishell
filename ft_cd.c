@@ -60,26 +60,20 @@ int	alloc_or_args(char *msg, char *to_free)
 int	ft_cd_ultra(char ***envp, char **argv)
 {
 	char	*oldpwd;
-	char	*newpwd;
 	char	*path;
 
-	if (arg_count(argv) != 2)
+	if (arg_count(argv) > 2)
 		return (alloc_or_args("Minishell: cd: too many arguments\n", NULL));
-	path = argv[1];
+	if (handle_cd_path(envp, argv, &path))
+		return (1);
 	oldpwd = getcwd(NULL, 0);
 	if (!oldpwd)
 		oldpwd = ft_strdup("");
 	if (!oldpwd)
 		return (alloc_or_args("Minishell: cd: alloc error\n", NULL));
-	if (if_chdir_fail(oldpwd, path))
+	if (handle_cd_execution(envp, path, oldpwd))
 		return (1);
-	newpwd = getcwd(NULL, 0);
-	if (!newpwd)
-		newpwd = ft_strdup(path);
-	if (!newpwd)
-		return (alloc_or_args("Minishell: cd: alloc error\n", oldpwd));
-	update_pwd(envp, oldpwd, newpwd);
-	free(oldpwd);
-	free(newpwd);
+	if (arg_count(argv) == 1)
+		free(path);
 	return (0);
 }

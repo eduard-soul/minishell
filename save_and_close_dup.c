@@ -61,31 +61,8 @@ int	check_and_save_dup(t_cmds *cmds, int save_fd_in_out[2],
 			return (1);
 	}
 	if (!cmds->argv || !cmds->argv[0])
-	{
-		check_and_close_fds(cmds);
-		if (is_alone_builtin)
-			return (0);
-		safe_exit_with_cmds(cmds, 0);
-	}
-	if (cmds->std_input > 0)
-	{
-		if (dup2(cmds->std_input, STDIN_FILENO) == -1)
-		{
-			perror("dup2");
-			safe_exit_with_cmds(cmds, 1);
-		}
-		close(cmds->std_input);
-		cmds->std_input = 0;
-	}
-	else if (cmds->previous)
-	{
-		if (dup2(cmds->previous->fd[0], STDIN_FILENO) == -1)
-		{
-			perror("dup2");
-			safe_exit_with_cmds(cmds, 1);
-		}
-	}
-	return (2);
+		return (handle_empty_argv(cmds, is_alone_builtin));
+	return (handle_stdin_dup(cmds));
 }
 
 void	dup_and_close(int save_fd_in, int save_fd_out)

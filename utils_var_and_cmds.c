@@ -66,30 +66,17 @@ int	search_and_replace_var_double_quotes(char **str,
 
 int	search_and_replace_var(char **str, char **envp, int last_ret, size_t i)
 {
-	int	j;
-
 	while ((*str)[i])
 	{
 		if ((*str)[i] == '\\' && (*str)[i + 1] == '$')
-		{
-			j = i - 1;
-			while ((*str)[++j])
-				(*str)[j] = (*str)[j + 1];
-			i++;
-		}
+			handle_escape_char(str, &i);
 		else if ((*str)[i] == '$')
 		{
 			if (!replace_var(str, &i, envp, last_ret))
 				return (0);
 		}
 		else if ((*str)[i] == '\'')
-		{
-			i++;
-			while ((*str)[i] && (*str)[i] != '\'')
-				i++;
-			if ((*str)[i])
-				i++;
-		}
+			handle_single_quotes(str, &i);
 		else if ((*str)[i] == '\"')
 		{
 			if (!search_and_replace_var_double_quotes(str, &i, envp, last_ret))
@@ -116,30 +103,10 @@ t_cmds	*add_elem_to_cmds(t_cmds **cmds, int size_argv, int size_redir,
 {
 	t_cmds	*tmp;
 
-	tmp = malloc(sizeof(t_cmds));
+	tmp = init_cmd_elem(envp, size_argv, size_redir);
 	if (!tmp)
 		return (NULL);
-	tmp->envp = envp;
-	tmp->argv = malloc(sizeof(char *) * (size_argv + 1));
-	if (!tmp->argv)
-		return (free_and_null(&tmp));
-	tmp->redirections = malloc(sizeof(char *) * (size_redir + 1));
-	if (!tmp->redirections)
-		free_and_null(tmp->argv);
-	tmp->fd[0] = -1;
-	tmp->fd[1] = -1;
-	tmp->std_input = 0;
-	if (!tmp->redirections)
-		return (free_and_null(tmp));
-	while (*cmds && (*cmds)->next)
-		*cmds = (*cmds)->next;
-	if (*cmds)
-		(*cmds)->next = tmp;
-	if (*cmds)
-		tmp->previous = *cmds;
-	else
-		tmp->previous = NULL;
-	tmp->next = NULL;
+	link_cmd_elem(cmds, tmp);
 	go_to_first_elem(cmds, tmp);
 	return (*cmds);
 }

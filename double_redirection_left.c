@@ -25,44 +25,6 @@ void	hd_setup_heredoc_signals(void)
 		perror("signal");
 }
 
-void	hd_child(int wfd, char *delim, t_cmds *cmds)
-{
-	char		*line;
-	t_cmds		*tmp;
-
-	tmp = cmds;
-	while (tmp->previous)
-		tmp = tmp->previous;
-	while (tmp)
-	{
-		if (tmp->fd[0] > 2)
-			close(tmp->fd[0]);
-		if (tmp->fd[1] > 2)
-			close(tmp->fd[1]);
-		tmp = tmp->next;
-	}
-	hd_setup_heredoc_signals();
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || !ft_strcmp(line, delim))
-		{
-			free(line);
-			break ;
-		}
-		if (write(wfd, line, ft_strlen(line)) != ft_strlen(line)
-			|| write(wfd, "\n", 1) != 1)
-		{
-			free(line);
-			close(wfd);
-			safe_exit_with_cmds(cmds, 1);
-		}
-		free(line);
-	}
-	close(wfd);
-	safe_exit_with_cmds(cmds, 0);
-}
-
 int	hd_parent_wait(int rfd, pid_t pid)
 {
 	int	status;

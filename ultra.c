@@ -43,11 +43,11 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	if (!isatty(STDIN_FILENO))
+	/*if (!isatty(STDIN_FILENO))
 	{
 		ft_putstr_fd("minishell: not a tty\n", STDERR_FILENO);
 		return (1);
-	}
+	}*/
 	last_ret = 0;
 	envp_copy = copy_array_string(envp);
 	if (!envp_copy)

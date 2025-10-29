@@ -201,5 +201,20 @@ void	safe_close_both_fds(int fd1, int fd2);
 void	dup_and_close(int save_fd_in, int save_fd_out);
 int		check_and_save_dup(t_cmds *cmds, int save_fd_in_out[2],
 			int is_alone_builtin, int *is_child);
+int		handle_empty_argv(t_cmds *cmds, int is_alone_builtin);
+int		handle_stdin_dup(t_cmds *cmds);
+int		handle_escape_char(char **str, size_t *i);
+int		handle_single_quotes(char **str, size_t *i);
+t_cmds	*init_cmd_elem(char ***envp, int size_argv, int size_redir);
+void	link_cmd_elem(t_cmds **cmds, t_cmds *tmp);
+void	close_all_fds(t_cmds *cmds);
+void	process_heredoc_line(int wfd, char *line, t_cmds *cmds);
+void	hd_setup_heredoc_signals(void);
+void	hd_child(int wfd, char *delim, t_cmds *cmds);
+char	*get_home_path(char ***envp);
+int		handle_cd_path(char ***envp, char **argv, char **path);
+int		handle_cd_execution(char ***envp, char *path, char *oldpwd);
+int		alloc_or_args(char *msg, char *to_free);
+void	update_pwd(char ***envp, char *oldpwd, char *newpwd);
 
 #endif
