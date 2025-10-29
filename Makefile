@@ -1,10 +1,9 @@
 NAME=minishell
 
 CFLAGS:= -Wall -Wextra -Werror
-FLAGS_MACOS = -I/opt/homebrew/opt/readline/include -L/opt/homebrew/opt/readline/lib -lhistory
 FLAGS_LEAK= -g -fsanitize=address
 FLAG_FILES= -lreadline
-CC= clang
+CC= cc
 
 SRC= ultra.c ./ft_cd.c ./utils.c ./ft_env.c ./signal.c ./ft_pwd.c ./ft_exit.c \
 	 ./ft_split.c ./ft_putstr_fd.c ./until_pipe.c ./ft_strlen.c ./ft_strncpy.c \
@@ -31,7 +30,7 @@ CYAN=\033[36m
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) -I $(INCLUDES) -o $(NAME) $(FLAG_FILES) $(FLAGS_MACOS)
+	@$(CC) $(CFLAGS) $(OBJ) -I $(INCLUDES) -o $(NAME) $(FLAG_FILES)
 	@echo "$(GREEN)- Minishell created ✓ ✓ ✓-$(RESET)"
 
 %.o: %.c
